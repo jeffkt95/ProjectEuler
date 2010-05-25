@@ -4,6 +4,10 @@ import math
 from numpy import *
 
 def main():
+	#This solution is based on the fact that the number of routes to any node
+	#is the sum of the routes to the node above it, and the node to the left of it.
+	#In other words, the number of routes to a particular node is the sum of the 
+	#the routes from any nodes that could get you to that node.
 	gridSize = 20
 	
 	numNodes = gridSize + 1
