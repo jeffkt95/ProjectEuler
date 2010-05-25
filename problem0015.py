@@ -1,28 +1,32 @@
 import sys
 import os
 import math
-
-def nextStep(row, col, maxRow, maxCol, numRoutes):
-	if (row == maxRow and col == maxCol):
-		numRoutes = numRoutes + 1
-		return numRoutes
-	if (row < maxRow):
-		numRoutes = nextStep(row + 1, col, maxRow, maxCol, numRoutes)
-	if (col < maxCol):
-		numRoutes = nextStep(row, col + 1, maxRow, maxCol, numRoutes)
-	return numRoutes
+from numpy import *
 
 def main():
+	#This solution is based on the fact that the number of routes to any node
+	#is the sum of the routes to the node above it, and the node to the left of it.
+	#In other words, the number of routes to a particular node is the sum of the 
+	#the routes from any nodes that could get you to that node.
+	gridSize = 20
+	
+	numNodes = gridSize + 1
 	numRoutes = 0
-	maxRow = 2
-	maxCol = 2
 	
-	for i in range(0, maxRow):
-		for j in range(1, maxCol):
+	numRoutesToNode = zeros((numNodes, numNodes))
 	
-	numRoutes = nextStep(0, 0, 15, 15, numRoutes)
+	numRoutesToNode[0][0] = 1
 	
-	print("The number of routes is " + str(numRoutes))
+	for row in range(0, numNodes):
+		for col in range(0, numNodes):
+			if (row > 0 and col > 0):
+				numRoutesToNode[row][col] = numRoutesToNode[row-1][col] + numRoutesToNode[row][col-1]
+			elif (row > 0):
+				numRoutesToNode[row][col] = numRoutesToNode[row-1][col]
+			elif (col > 0):
+				numRoutesToNode[row][col] = numRoutesToNode[row][col-1]
+
+	print("Grid of size " + str(gridSize) + " has " + str(numRoutesToNode[numNodes-1][numNodes-1]) + " routes.")
 	
 if __name__ == "__main__":
 	from timeit import Timer
